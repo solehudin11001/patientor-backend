@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Genders } from "./types";
+import { Diagnoses, Genders } from "./types";
 
 // Zod patient schema
 export const NewPatientSchema = z.object({
@@ -9,3 +9,13 @@ export const NewPatientSchema = z.object({
   gender: z.nativeEnum(Genders),
   occupation: z.string(),
 });
+
+export const parseDiagnosisCodes = (
+  object: unknown
+): Array<Diagnoses["code"]> => {
+  if (!object || typeof object !== "object" || !("diagnosisCodes" in object)) {
+    return [] as Array<Diagnoses["code"]>;
+  }
+
+  return object.diagnosisCodes as Array<Diagnoses["code"]>;
+};
