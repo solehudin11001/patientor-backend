@@ -1,10 +1,9 @@
 import { v1 as uuid } from "uuid";
 import { Entry, NonSensitivePatient, Patient, UnionOmit } from "../types";
 import dataPatients from "../../data/patients";
-import { parseDiagnosisCodes } from "../utils";
 
 // Get all patients
-const getPatients = (): Omit<NonSensitivePatient, "ssn">[] => {
+const getPatients = (): NonSensitivePatient[] => {
   return dataPatients.map(({ id, name, dateOfBirth, gender, occupation }) => {
     return { id, name, dateOfBirth, gender, occupation };
   });
@@ -34,15 +33,15 @@ const addPatientEntry = (
   if (!patient) {
     throw new Error("Patient not found");
   }
-  const diagnosisCodes = parseDiagnosisCodes(newPatientEntry);
+
   const entry = {
     id: uuid(),
-    diagnosisCodes,
     ...newPatientEntry,
   };
+
   patient.entries.push(entry);
   dataPatients.map((p) => (p.id === id ? patient : p));
-  return patient;
+  return entry;
 };
 
 export default {
